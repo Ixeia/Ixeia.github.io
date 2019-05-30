@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-search.css">
+        <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="js/proj4.js"></script>
+        <script src="js/proj4leaflet.js"></script>
+        <script src="js/leaflet-search.js"></script>
+        <script src="data/IFN_1.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#ffff00',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ffff00',
+                fillOpacity: 1
+              });
+            }
+            highlightLayer.openPopup();
+        }
+        var crs = new L.Proj.CRS('EPSG:25830', '+proj=utm +zone=30 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', {
+            resolutions: [2800, 1400, 700, 350, 175, 84, 42, 21, 11.2, 5.6, 2.8, 1.4, 0.7, 0.35, 0.14, 0.07],
+        });
+        var map = L.map('map', {
+            crs: crs,
+            continuousWorld: false,
+            worldCopyJump: false, 
+            zoomControl:true, maxZoom:8, minZoom:6
+        }).fitBounds([[42.5266176225653,0.3501071604940113],[42.72139073008304,0.7993414139126944]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a>');
+        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+            map.setMaxBounds(map.getBounds());
+        }
+        var img_relieve_0 = 'data/relieve_0.png';
+        var img_bounds_relieve_0 = [[42.537378029772036,0.4247375565257421],[42.71029275918331,0.7056591111227084]];
+        var layer_relieve_0 = new L.imageOverlay(img_relieve_0, img_bounds_relieve_0);
+        bounds_group.addLayer(layer_relieve_0);
+        map.addLayer(layer_relieve_0);
+        function pop_IFN_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['tablas_i_1'] !== null ? Autolinker.link(String(feature.properties['tablas_i_1'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['tablas_i_2'] !== null ? Autolinker.link(String(feature.properties['tablas_i_2'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['tablas_i_3'] !== null ? Autolinker.link(String(feature.properties['tablas_i_3'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>Area (ha)</strong><br />' + (feature.properties['Area (ha)'] !== null ? Autolinker.link(String(feature.properties['Area (ha)'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_IFN_1_0(feature) {
+            switch(String(feature.properties['tablas_i_1'])) {
+                case 'Abies alba':
+                    return {
+                pane: 'pane_IFN_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.4)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(166,237,122,0.4)',
+            }
+                    break;
+                case 'Betula alba':
+                    return {
+                pane: 'pane_IFN_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.4)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(230,187,134,0.4)',
+            }
+                    break;
+                case 'Betula spp.':
+                    return {
+                pane: 'pane_IFN_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.4)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(21,204,15,0.4)',
+            }
+                    break;
+                case 'Buxus sempervirens':
+                    return {
+                pane: 'pane_IFN_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.4)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(103,227,143,0.4)',
+            }
+                    break;
+                case 'Corylus avellana':
+                    return {
+                pane: 'pane_IFN_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.4)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(211,112,238,0.4)',
+            }
+                    break;
+                case 'Fagus sylvatica':
+                    return {
+                pane: 'pane_IFN_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.4)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(220,113,89,0.4)',
+            }
+                    break;
+                case 'Fraxinus excelsior':
+                    return {
+                pane: 'pane_IFN_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.4)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(45,204,151,0.4)',
+            }
+                    break;
+                case 'Juniperus communis':
+                    return {
+                pane: 'pane_IFN_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.4)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(232,103,170,0.4)',
+            }
+                    break;
+                case 'Pinus sylvestris':
+                    return {
+                pane: 'pane_IFN_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.4)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(12,65,200,0.4)',
+            }
+                    break;
+                case 'Pinus uncinata':
+                    return {
+                pane: 'pane_IFN_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.4)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(12,210,213,0.4)',
+            }
+                    break;
+                case 'Populus tremula':
+                    return {
+                pane: 'pane_IFN_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.4)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(192,229,90,0.4)',
+            }
+                    break;
+                case 'Populus x canadensis':
+                    return {
+                pane: 'pane_IFN_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.4)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(205,197,123,0.4)',
+            }
+                    break;
+                case 'Quercus petraea':
+                    return {
+                pane: 'pane_IFN_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.4)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(124,181,213,0.4)',
+            }
+                    break;
+                case 'Quercus pubescens (Q. humilis)':
+                    return {
+                pane: 'pane_IFN_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.4)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(122,115,223,0.4)',
+            }
+                    break;
+                case 'Salix spp.':
+                    return {
+                pane: 'pane_IFN_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.4)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(229,110,130,0.4)',
+            }
+                    break;
+                case 'Tilia cordata':
+                    return {
+                pane: 'pane_IFN_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,0.4)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(231,70,210,0.4)',
+            }
+                    break;
+                default:
+                    return {
+                pane: 'pane_IFN_1',
+                opacity: 1,
+                color: 'rgba(255,255,255,0.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,0.4)',
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_IFN_1');
+        map.getPane('pane_IFN_1').style.zIndex = 401;
+        map.getPane('pane_IFN_1').style['mix-blend-mode'] = 'normal';
+        var layer_IFN_1 = new L.geoJson(json_IFN_1, {
+            attribution: '',
+            pane: 'pane_IFN_1',
+            onEachFeature: pop_IFN_1,
+            style: style_IFN_1_0,
+        });
+        bounds_group.addLayer(layer_IFN_1);
+        map.addLayer(layer_IFN_1);
+        var osmGeocoder = new L.Control.Geocoder({
+            collapsed: true,
+            position: 'topleft',
+            text: 'Search',
+            title: 'Testing'
+        }).addTo(map);
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .className += ' fa fa-search';
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .title += 'Search for a place';
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'IFN<br /><table><tr><td style="text-align: center;"><img src="legend/IFN_1_Abiesalba0.png" /></td><td>Abies alba</td></tr><tr><td style="text-align: center;"><img src="legend/IFN_1_Betulaalba1.png" /></td><td>Betula alba</td></tr><tr><td style="text-align: center;"><img src="legend/IFN_1_Betulaspp2.png" /></td><td>Betula spp.</td></tr><tr><td style="text-align: center;"><img src="legend/IFN_1_Buxussempervirens3.png" /></td><td>Buxus sempervirens</td></tr><tr><td style="text-align: center;"><img src="legend/IFN_1_Corylusavellana4.png" /></td><td>Corylus avellana</td></tr><tr><td style="text-align: center;"><img src="legend/IFN_1_Fagussylvatica5.png" /></td><td>Fagus sylvatica</td></tr><tr><td style="text-align: center;"><img src="legend/IFN_1_Fraxinusexcelsior6.png" /></td><td>Fraxinus excelsior</td></tr><tr><td style="text-align: center;"><img src="legend/IFN_1_Juniperuscommunis7.png" /></td><td>Juniperus communis</td></tr><tr><td style="text-align: center;"><img src="legend/IFN_1_Pinussylvestris8.png" /></td><td>Pinus sylvestris</td></tr><tr><td style="text-align: center;"><img src="legend/IFN_1_Pinusuncinata9.png" /></td><td>Pinus uncinata</td></tr><tr><td style="text-align: center;"><img src="legend/IFN_1_Populustremula10.png" /></td><td>Populus tremula</td></tr><tr><td style="text-align: center;"><img src="legend/IFN_1_Populusxcanadensis11.png" /></td><td>Populus x canadensis</td></tr><tr><td style="text-align: center;"><img src="legend/IFN_1_Quercuspetraea12.png" /></td><td>Quercus petraea</td></tr><tr><td style="text-align: center;"><img src="legend/IFN_1_QuercuspubescensQhumilis13.png" /></td><td>Quercus pubescens (Q. humilis)</td></tr><tr><td style="text-align: center;"><img src="legend/IFN_1_Salixspp14.png" /></td><td>Salix spp.</td></tr><tr><td style="text-align: center;"><img src="legend/IFN_1_Tiliacordata15.png" /></td><td>Tilia cordata</td></tr><tr><td style="text-align: center;"><img src="legend/IFN_1_16.png" /></td><td></td></tr></table>': layer_IFN_1,"relieve": layer_relieve_0,}).addTo(map);L.control.scale({position: 'bottomleft', maxWidth: 100, metric: true, imperial: false, updateWhenIdle: false}).addTo(map);
+        setBounds();
+        map.addControl(new L.Control.Search({
+            layer: layer_IFN_1,
+            initial: false,
+            hideMarkerOnCollapse: true,
+            propertyName: 'tablas_i_1'}));
+        document.getElementsByClassName('search-button')[0].className +=
+         ' fa fa-binoculars';
+        L.ImageOverlay.include({
+            getBounds: function () {
+                return this._bounds;
+            }
+        });
+        </script>
+    </body>
+</html>
