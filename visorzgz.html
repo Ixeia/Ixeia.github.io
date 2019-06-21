@@ -46,42 +46,6 @@
         </div>
       </div>
     </nav>
-    <!-- Barra de navegación situada en la parte izquierda del visor para interactuar con las capas, leyenda, etc.  -->
-    <div id="container" class="container-fluid">
-        <div id="sidebar" class="sidebar collapsed">
-          <div class="sidebar-tabs">
-              <ul role="tablist">
-                  <li><a href="#home" role="tab"><i class="fa fa-map"></i></a></li>
-                  <li><a href="#leyenda" role="tab"><i class="fa fa-photo"></i></a></li>
-                  <li><a href="#info" role="tab"><i class="fa fa-info-circle"></i></a></li>
-                </ul>
-  
-              <ul role="tablist">
-                  <li><a href="#settings" role="tab"><i class="fa fa-gear"></i></a></li>
-              </ul>
-          </div>
-          <div class="sidebar-content">
-          <div class="sidebar-pane" id="home">
-              <h1 class="sidebar-header">Capas<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
-              <div class="" id="control-capas">
-              </div>
-          </div>
-          <div class="sidebar-pane" id="leyenda">
-              <h1 class="sidebar-header">Leyenda<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
-              <div class="" id="control-leyenda">
-              </div>
-          </div>
-          <div class="sidebar-pane" id="info">
-            <h1 class="sidebar-header">Información<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
-            <br>
-            <p>En el siguiente visor cartográfico se presentan diferentes cartografías. En el apartado de Capas, podemos encontrar diferentes mapas base y, otros mapas GeoJson para superponer y poder analizar la información del municipio de Zaragoza. Los datos han sido recogidos del catálogo de Datos abiertos de Zaragoza, así como en el caso de la cartografía base, de OpenStreetMaps.</p>  
-          </div>
-         
-          <div class="sidebar-pane" id="settings">
-              <h1 class="sidebar-header">Ajustes<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
-              </div>
-          </div>
-        </div>
         <!-- Incorporación del mapa a la página web  -->
         <div id="mapid"></div>
   </body>
@@ -104,27 +68,9 @@
       center:[41.65, -0.85],
       zoom: 13 
     }) //Creación de la variable mapa
-    var sidebar = L.control.sidebar('sidebar').addTo(map); //Creación de la variable sidebar (barra de interacción de la parte izquierda)
     var osm = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
-    var byn = L.tileLayer('http://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map); //Creación de variables de las dos capas base de servicio wms procedentes de OSM
-
-
-    var baseMaps = {
-                "Mapa base OSM": osm,
-                "Mapa base B&N": byn,
-        };    
-    
-    var Overlay = {
-                "Lineas y paradas Tranvía": L.geoJson(tranvia), 
-                "Aparcamientos Bicis": L.geoJson(aparcabicis),
-        }; //Incorporación de los GeoJSON tranvía y aparcabicis en formato JS a las capas de supersposición (Overlay)
-    var controlCapas = L.control.layers(baseMaps, Overlay).addTo(map); //Creación de variables control de capas para establecer cuáles van a ser capas base (WMS) y cuales de superposición (GeoJSON)
-    document.getElementById("control-capas").appendChild(controlCapas.getContainer()
-    ); //Introducción de la variable controlcapas al elemento del sidebar denominado control-capas
 
     </script> 
 </html>
