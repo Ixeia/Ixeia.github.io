@@ -473,6 +473,37 @@ body.mobile-nav-active #mobile-nav-toggle {
   color: #fff;
 }
 
+.div-flex-center {
+  display:flex; 
+  justify-content: center; 
+  align-items: center; 
+}
+
+.mi-iframe {
+  width: 100px;
+  height: 50px;
+}
+
+/* CSS pantallas de 320px o superior */
+@media (min-width: 320px) {
+
+  .mi-iframe {
+    width: 200px;
+    height: 150px;
+  } 
+
+}
+
+/* CSS pantalla 768px o superior */
+@media (min-width: 768px) {
+
+  .mi-iframe {
+    width: 500px;
+    height: 350px;
+  } 
+
+}
+
 /*--------------------------------------------------------------
 # Sections
 --------------------------------------------------------------*/
@@ -606,7 +637,7 @@ body.mobile-nav-active #mobile-nav-toggle {
   margin-bottom: 50px;
   text-align: center;
   border: 1px solid #e6e6e6;
-  height: 200px;
+  height: 220px;
   position: relative;
   background: #fafafa;
 }
@@ -980,3 +1011,4 @@ body.mobile-nav-active #mobile-nav-toggle {
   font-size: 13px;
   color: #ccc;
 }
+
