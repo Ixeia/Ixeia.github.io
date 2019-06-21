@@ -53,16 +53,12 @@
     <!-- Diferentes scripts javascript de la página web bootstrap, leaflet, etc.  -->
     <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <script src="js/tranvia.js"></script>
-    var Overlay = {
-                "Lineas y paradas Tranvía": L.geoJson(tranvia), 
-        }; 
     <script type="text/javascript">
         var map = L.map ('mapid',{
         center:[41.65, -0.85],
         zoom: 13 
         })
-        var byn = L.tileLayer('http://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
+        var osm = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
     </script> 
