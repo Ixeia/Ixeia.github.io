@@ -51,7 +51,16 @@
 	  OSM_mapnik.addTo(mi_mapa);
 	
 	// añadimos marcador
-	var marker = L.marker([41.64, -0.89]).addTo(mi_mapa);
+	var marker = L.marker([41.642061, -0.899572]).addTo(mi_mapa);
+	
+	// añadimos círculo
+  	var circle = L.circle([41, -1], {
+    		color: 'red',
+   		fillColor: '#f03',
+    		fillOpacity: 0.5,
+    		radius: 300000
+ 		}).addTo(mi_mapa);
+
 	
 	// añadir WMS (mapa del PNOA)
 	  var PNOA = L.tileLayer.wms('http://www.idee.es/wms/PNOA/PNOA?', {  //URL WMS
