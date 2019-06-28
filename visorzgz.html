@@ -1,115 +1,113 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Visor con Leaflet</title>
-<!-- Metadatos de la página -->
-<meta charset="utf-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">  <!-- Para añadir las opcines de la cabecera -->
-<meta name="description" content="Demo project with jQuery">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-    
-<!-- Enlaces a librerías, hojas de estilo y plugins de leaflet  -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<title>Visor con Leaflet</title>
+	<!-- Metadatos de la página -->
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">  <!-- Para añadir las opcines de la cabecera -->
+	<meta name="description" content="Demo project with jQuery">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!-- enlace a código CSS de Leaflet en la cabecera -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.0/dist/leaflet.css"
- integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
- crossorigin=""/>
-<!-- enlace a JavaScript de Leaflet justo tras CSS -->
-<script src="https://unpkg.com/leaflet@1.5.0/dist/leaflet.js"
- integrity="sha512-3Wcxp7F9bV2pl+MBgrL6Pz7AJASLpemmQPIiPA0lDs3ImF0z4JuuMIBPeirLbgIuhfH2gJyGWZjvm6M+Zr7L6Q=="
- crossorigin=""></script>
+	<!-- Enlaces a librerías, hojas de estilo y plugins de leaflet  -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-<!-- capas a cargar -->
-<script src="provincias.js"></script>
+	<!-- enlace a código CSS de Leaflet en la cabecera -->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.0/dist/leaflet.css"
+	 integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+	 crossorigin=""/>
+	<!-- enlace a JavaScript de Leaflet justo tras CSS -->
+	<script src="https://unpkg.com/leaflet@1.5.0/dist/leaflet.js"
+	 integrity="sha512-3Wcxp7F9bV2pl+MBgrL6Pz7AJASLpemmQPIiPA0lDs3ImF0z4JuuMIBPeirLbgIuhfH2gJyGWZjvm6M+Zr7L6Q=="
+	 crossorigin=""></script>
+
+	<!-- capas a cargar -->
+	<script src="provincias.js"></script>
 
 </head>
+
 <body>
-<!-- Título del mapa -->
-<h1><span style="font-family: sans-serif;">Visor cartográfico</span></h1>
+	<!-- bloque dónde aparecerá el mapa (tamaño)-->
+	<div id="bloque_mapa" style="width: 100%; height: 550px;"></div>
 
-<!-- bloque dónde aparecerá el mapa (tamaño)-->
-<div id="bloque_mapa" style="width: 100%; height: 550px;"></div>
+	<!-- script que define las características de `bloque_mapa` -->
+	<script>
+	// definimos el mapa como una varianble y le ajustamos dónde lo queremos ver (coordenadas y zoom)
+		var mi_mapa = L.map('bloque_mapa').setView([41.65, -0.85], 11);
 
-<!-- script que define las características de `bloque_mapa` -->
-<script>
-// definimos el mapa como una varianble y le ajustamos dónde lo queremos ver (coordenadas y zoom)
-	var mi_mapa = L.map('bloque_mapa').setView([41.65, -0.85], 11);
+	// añadir TMS
+	  var stamen_tms = L.tileLayer('http://a.tile.stamen.com/terrain/{z}/{x}/{y}.png', {
+		attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>,<a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash;Map data: &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>contributors,<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+		maxZoom: 20
+		});
+	  stamen_tms.addTo(mi_mapa);
 
-// añadir TMS
-  var stamen_tms = L.tileLayer('http://a.tile.stamen.com/terrain/{z}/{x}/{y}.png', {
-        attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>,<a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash;Map data: &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>contributors,<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
-        maxZoom: 20
-        });
-  stamen_tms.addTo(mi_mapa);
+	// añadir otro TMS
+	var OSM_mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		maxZoom: 19,
+		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+	});
+	  OSM_mapnik.addTo(mi_mapa);
 
-// añadir otro TMS
-var OSM_mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-	maxZoom: 19,
-	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-});
-  OSM_mapnik.addTo(mi_mapa);
+	// añadir WMS (mapa del PNOA)
+	  var PNOA = L.tileLayer.wms('http://www.idee.es/wms/PNOA/PNOA?', {  //URL WMS
+	      layers: 'PNOA',          // capa del WMS
+	      format: 'image/png',     // tipo de formato
+	      transparent: true,       // activa capa alfa/transparente
+	      });
+	  PNOA.addTo(mi_mapa);         // añadir capa al mapa
 
-// añadir WMS (mapa del PNOA)
-  var PNOA = L.tileLayer.wms('http://www.idee.es/wms/PNOA/PNOA?', {  //URL WMS
-      layers: 'PNOA',          // capa del WMS
-      format: 'image/png',     // tipo de formato
-      transparent: true,       // activa capa alfa/transparente
-      });
-  PNOA.addTo(mi_mapa);         // añadir capa al mapa
+	// añadir control de mapa base y overlay
+	var baseMaps = {                  // variable con apartado de mapas base
+	    "OpenStreetMap": OSM_mapnik,  // elemento a incluir y descripción
+	    "Stamen": stamen_tms,
+	    };
+	var overlayMaps = {              // apartado de capas
+	    "Ortotfoto PNOA": PNOA       // elemento a incluir y descripción
+	    };
+	var capas = L.control.layers(   // variable con control de capas
+	  baseMaps,                     // añadiendo capas base
+	  overlayMaps,                  // añadiendo capas
+	  {collapsed:true});            // control NO desplegado
+	capas.addTo(mi_mapa);           // añadimos control de capas al mapa
 
-// añadir control de mapa base y overlay
-var baseMaps = {                  // variable con apartado de mapas base
-    "OpenStreetMap": OSM_mapnik,  // elemento a incluir y descripción
-    "Stamen": stamen_tms,
-    };
-var overlayMaps = {              // apartado de capas
-    "Ortotfoto PNOA": PNOA       // elemento a incluir y descripción
-    };
-var capas = L.control.layers(   // variable con control de capas
-  baseMaps,                     // añadiendo capas base
-  overlayMaps,                  // añadiendo capas
-  {collapsed:true});            // control NO desplegado
-capas.addTo(mi_mapa);           // añadimos control de capas al mapa
+	// escala
+	var escala = L.control.scale()  // variable escala
+	escala.addTo(mi_mapa);          // añade escala al mapa
 
-// escala
-var escala = L.control.scale()  // variable escala
-escala.addTo(mi_mapa);          // añade escala al mapa
-
-// añadir GeoJSON
-var layer_provincias = new L.geoJson(provincias, {
-            attribution: '<a href=""></a>',
-            pane: 'provincias',
-            onEachFeature: pop_cities_1,
-            pointToLayer: function (feature, latlng) {
-                var context = {
-                    feature: feature,
-                    variables: {}
-                };
-                return L.circleMarker(latlng, style_cities_1_0(feature));
-            },});
-</script>
-<!-- Barra de navegación superior de la página web con diferentes opciones para interactuar con otros html  -->
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#">Visor Cartográfico</a>
-      </div>
-      <div id="navbar" class="collapse navbar-collapse">
-        <ul class="nav navbar-nav">
-          <li class="active"><a href="#">Inicio</a></li>
-          <li><a class="dropdown-item" href="index.html">Página principal</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+	// añadir GeoJSON
+	var layer_provincias = new L.geoJson(provincias, {
+		    attribution: '<a href=""></a>',
+		    pane: 'provincias',
+		    onEachFeature: pop_cities_1,
+		    pointToLayer: function (feature, latlng) {
+			var context = {
+			    feature: feature,
+			    variables: {}
+			};
+			return L.circleMarker(latlng, style_cities_1_0(feature));
+		    },});
+	</script>
+	<!-- Barra de navegación superior de la página web con diferentes opciones para interactuar con otros html  -->
+	<nav class="navbar navbar-default navbar-fixed-top">
+	    <div class="container">
+	      <div class="navbar-header">
+		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+		  <span class="sr-only">Toggle navigation</span>
+		  <span class="icon-bar"></span>
+		  <span class="icon-bar"></span>
+		  <span class="icon-bar"></span>
+		</button>
+		<a class="navbar-brand" href="#">Visor Cartográfico</a>
+	      </div>
+	      <div id="navbar" class="collapse navbar-collapse">
+		<ul class="nav navbar-nav">
+		  <li class="active"><a href="#">Inicio</a></li>
+		  <li><a class="dropdown-item" href="index.html">Página principal</a></li>
+		    </ul>
+		  </li>
+		</ul>
+	      </div>
+	    </div>
+	  </nav>
 </body>
 </html>
