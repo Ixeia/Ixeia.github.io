@@ -43,13 +43,14 @@
 		});
 	  stamen_tms.addTo(mi_mapa);
 
-	// añadir otro TMS
+	// añadir otro TMS (mapa de fondo)
 	var OSM_mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		maxZoom: 19,
 		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 	});
 	  OSM_mapnik.addTo(mi_mapa);
-
+	// añadimos marcador
+	var marker = L.marker([40, -1]).addTo(mi_mapa);
 	// añadir WMS (mapa del PNOA)
 	  var PNOA = L.tileLayer.wms('http://www.idee.es/wms/PNOA/PNOA?', {  //URL WMS
 	      layers: 'PNOA',          // capa del WMS
@@ -101,9 +102,7 @@
 		id: 'mapbox.streets'
 	}).addTo(mi_mapa);
 
-	// añadimos marcador
-	var marker = L.marker([40, -8]
-	).addTo(mi_mapa);
+	
 
 	// añadimos círculo
 	  var circle = L.circle([41, -1], {
