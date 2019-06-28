@@ -27,7 +27,7 @@
 
 <body>
 	<!-- espacio para que la cabecera no tape el mapa-->
-	<h1><span style="font-family: sans-serif;">Maapa</span></h1>
+	<h2><span style="font-family: sans-serif;">a</span></h21>
 	<!-- bloque dónde aparecerá el mapa (tamaño)-->
 	<div id="bloque_mapa" style="width: 100%; height: 550px;"></div>
 
@@ -88,6 +88,19 @@
 			};
 			return L.circleMarker(latlng, style_cities_1_0(feature));
 		    },});
+	// añadimos tiles de fondo
+	L.tileLayer(
+    	// dirección de las tiles
+    	'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw',
+   	// propiedades
+   	{
+		maxZoom: 10,  // zoom máximo 10
+    	// Líneas de atribución
+		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+		id: 'mapbox.streets'
+	}).addTo(mi_mapa);
+
 	// añadimos marcador en las coordenadas de Zaragoza
 	var marker = L.marker([41.65, -0.85]
 	).addTo(mi_mapa);
