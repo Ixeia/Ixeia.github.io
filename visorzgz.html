@@ -101,17 +101,17 @@
 		id: 'mapbox.streets'
 	}).addTo(mi_mapa);
 
-	// añadimos marcador en las coordenadas de Zaragoza
-	var marker = L.marker([41.65, -0.85]
+	// añadimos marcador
+	var marker = L.marker([40, -8]
 	).addTo(mi_mapa);
 
-	// añadimos círculo que rodeé la ciudad de Zaragoza
-	var circle = L.circle([41, -1], {
-	color: 'yellow',
-	fillColor: '#ffffcc',
-	fillOpacity: 0.2,
-	radius: 30000
-	}).addTo(mi_mapa);
+	// añadimos círculo
+	  var circle = L.circle([41, -1], {
+	    color: 'red',
+	    fillColor: '#f03',
+	    fillOpacity: 0.5,
+	    radius: 300000
+	  }).addTo(mi_mapa);
 
 	</script>
 	
